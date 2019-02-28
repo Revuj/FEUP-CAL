@@ -15,7 +15,17 @@ int s_recursive(int n,int k)
 
 int s_dynamic(int n,int k)
 {
-	return 1;
+	int max = n - k;
+	int val[max + 1];
+
+	for (int i = 0; i <= max; i++)
+		val[i] = 1;
+
+	for (int i = 1; i < k; i++)
+		for (int j = 0; j <= max; j++)
+			val[j] += (i+1)*val[j-1];
+
+	return val[max];
 }
 
 
@@ -31,7 +41,12 @@ int b_recursive(int n)
 
 int b_dynamic(int n)
 {
-	return 0;
+	int sum(0);
+
+	for (int i = 1; i <= n; i++)
+		sum += s_dynamic(n, i);
+
+	return sum;
 }
 
 
