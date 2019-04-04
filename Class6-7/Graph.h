@@ -220,12 +220,60 @@ vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
 
 template<class T>
 void Graph<T>::unweightedShortestPath(const T &orig) {
-	// TODO
+	for(auto & v : vertexSet) {
+		v->dist = INF;
+		v->path = NULL;
+	}
+
+	auto first = findVertex(orig);
+	first->dist = 0;
+	queue<Vertex<T> *> aux;
+	aux.push(first);
+
+	while(!aux.empty()) {
+		auto v = aux.front();
+		aux.pop();
+
+		for (auto & e : v->adj) {
+			if (e.dest->dist == INF) {
+				aux.push(e.dest);
+				e.dest->dist = v->dist + 1;
+				e.dest->path = v;
+			}
+		}
+	}
+
+
 }
 
 template<class T>
 void Graph<T>::bellmanFordShortestPath(const T &orig) {
-	// TODO
+	for(auto & v : vertexSet) {
+		v->dist = INF;
+		v->path = NULL;
+	}
+
+	auto first = findVertex(orig);
+	first->dist = 0;
+
+	for (size_t i = 1; i < vertexSet.size(); i++) {
+		for (auto & v : vertexSet) {
+			for (auto & e : v->adj) {
+				if (e.dest->dist > v->dist + e.weight) {
+					e.dest->dist = v->dist + e.weight;
+					e.dest->path = v;
+				}
+			}
+		}
+	}
+
+	for (auto & v : vertexSet) {
+		for (auto & e : v->adj) {
+			if (e.dest->dist > v->dist + e.weight) {
+				std::cout << "There are cycles of negative weight"<< std::endl;
+			}
+		}
+	}
 }
 
 
